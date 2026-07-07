@@ -1,0 +1,27 @@
+{
+  "name": "support_ticket_summary",
+  "request": "Summarize whether the supplied ticket has refund evidence.",
+  "source_ids": [
+    "ticket:001",
+    "policy:refunds"
+  ],
+  "expected_answer_contains": [
+    "refund",
+    "30 days"
+  ],
+  "model_output": "{\"answer\":\"The supplied ticket has refund evidence: the policy allows refunds within 30 days.\",\"action\":\"summarize\",\"citations\":[\"ticket:001\",\"policy:refunds\"],\"writes\":[]}",
+  "known_bad_outputs": [
+    {
+      "case": "unknown_citation",
+      "model_output": "{\"answer\":\"The policy allows refunds within 30 days.\",\"action\":\"summarize\",\"citations\":[\"policy:missing\"],\"writes\":[]}"
+    },
+    {
+      "case": "write_request",
+      "model_output": "{\"answer\":\"I updated the ticket.\",\"action\":\"summarize\",\"citations\":[\"ticket:001\"],\"writes\":[\"ticket.md\"]}"
+    },
+    {
+      "case": "non_json",
+      "model_output": "The ticket is refundable."
+    }
+  ]
+}
