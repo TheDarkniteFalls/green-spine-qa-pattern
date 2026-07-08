@@ -43,6 +43,22 @@ python3 spine_green.py examples/spine_case.json
 - The answer contains the expected user-visible result.
 - Known-bad outputs still fail.
 
+## Browser QA Without Brittle Text Matching
+
+`browser_structure_check.py` shows the same idea for browser-facing work. It
+checks stable structure in a saved HTML fixture instead of matching exact page
+copy:
+
+- durable `data-testid` anchors for the workflow and form
+- a submit button identified by action and type
+- a status region identified by role and live-region attributes
+- a known-bad fixture that must fail
+
+```sh
+python3 browser_structure_check.py
+python3 browser_structure_check.py --self-test
+```
+
 ## Choosing A Green Spine
 
 Pick one path that would make the project feel broken if it regressed. Keep the
@@ -82,5 +98,8 @@ when the command becomes too hard to read or too slow to run.
 ```sh
 python3 spine_green.py
 python3 spine_green.py examples/spine_case.json
+python3 browser_structure_check.py
+python3 browser_structure_check.py --self-test
 python3 -m py_compile spine_green.py
+python3 -m py_compile browser_structure_check.py
 ```

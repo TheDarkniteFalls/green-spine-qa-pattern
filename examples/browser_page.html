@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Checkout Fixture</title>
+  </head>
+  <body>
+    <main data-testid="checkout-flow">
+      <form data-testid="order-form">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email">
+        <button data-action="submit-order" type="submit">Place order</button>
+      </form>
+      <section role="status" aria-live="polite" data-testid="order-status">
+        Ready
+      </section>
+    </main>
+  </body>
+</html>
