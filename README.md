@@ -1,5 +1,17 @@
 # Green-Spine QA Pattern
 
+<!-- toolkit-trust-card:start -->
+> **Public contract:** Stable pattern · about 5 min · Python 3 · no model · no network
+>
+> **Operation:** Read-only check; examples may use temporary files
+>
+> **A pass establishes:** One representative synthetic path and its known-bad cases satisfy the named checkpoint.
+>
+> **It does not establish:** A green spine deliberately does not prove every feature, path, or experience quality.
+>
+> **First check:** `python3 spine_green.py`
+<!-- toolkit-trust-card:end -->
+
 A tiny example of one named command that proves an important workflow still
 works.
 
