@@ -1,32 +1,25 @@
 # Green-Spine QA Pattern
 
-<!-- toolkit-trust-card:start -->
-> **Public contract:** Stable pattern · about 5 min · Python 3 · no model · no network
->
-> **Operation:** Read-only check; examples may use temporary files
->
-> **A pass establishes:** One representative synthetic path and its known-bad cases satisfy the named checkpoint.
->
-> **It does not establish:** A green spine deliberately does not prove every feature, path, or experience quality.
->
-> **First check:** `python3 spine_green.py`
-<!-- toolkit-trust-card:end -->
+Put the checks for one important workflow behind a command you can run again.
+That is the “green spine”: a small set of checks for the path you most need to
+keep working. Green means those checks passed, not that every part of the
+project has been tested.
 
-A tiny example of one named command that proves an important workflow still
-works.
-
-The demo does not call a model. It checks one synthetic assistant workflow:
-structured output must parse, cite supplied sources, stay read-only, answer the
-happy path, and reject known-bad outputs.
+This example checks a made-up assistant answer. It must be readable JSON,
+refer to supplied sources, stay read-only and contain the expected answer.
+The command also checks that deliberately bad answers are rejected. It calls
+no model and uses no network.
 
 ## Why It Exists
 
-Large projects often collect many tests but still need one compact command that
-answers a practical question: is the important path still healthy?
-
-This repo shows the small version of that pattern.
+If your project has many separate tests, it can be hard to know which ones to
+run before handing over a change. Start by naming one important path and the
+few checks that cover it. This repository gives you a small example to try
+before adapting that idea to your own project.
 
 ## Run
+
+From this repository’s folder, run the example with Python 3:
 
 ```sh
 python3 spine_green.py
@@ -41,15 +34,31 @@ PASS known_bad_outputs
 PASS green_spine
 ```
 
-You can also pass a fixture path:
+These four passes mean the example answer met its rules and the known-bad
+answers were rejected. A fixture is a saved test input; you can name the
+supplied one explicitly:
 
 ```sh
 python3 spine_green.py examples/spine_case.json
 ```
 
+<!-- toolkit-trust-card:placement -->
+
+<!-- toolkit-trust-card:start -->
+> **Public contract:** Stable pattern · about 5 min · Python 3 · no model · no network
+>
+> **Operation:** Read-only check; examples may use temporary files
+>
+> **A pass establishes:** One representative synthetic path and its known-bad cases satisfy the named checkpoint.
+>
+> **It does not establish:** A green spine deliberately does not prove every feature, path, or experience quality.
+>
+> **First check:** `python3 spine_green.py`
+<!-- toolkit-trust-card:end -->
+
 ## What The Spine Checks
 
-- The happy-path output is valid JSON.
+- The expected successful answer (the “happy path”) is valid JSON.
 - Citations use only supplied source IDs.
 - The workflow stays read-only.
 - The answer contains the expected user-visible result.
@@ -57,13 +66,13 @@ python3 spine_green.py examples/spine_case.json
 
 ## Browser QA Without Brittle Text Matching
 
-`browser_structure_check.py` shows the same idea for browser-facing work. It
-checks stable structure in a saved HTML fixture instead of matching exact page
-copy:
+Try `browser_structure_check.py` for the same idea applied to a saved web
+page. It reads an HTML fixture and checks for elements a test can identify
+even when the wording changes:
 
-- durable `data-testid` anchors for the workflow and form
+- `data-testid` labels that identify the workflow and form
 - a submit button identified by action and type
-- a status region identified by role and live-region attributes
+- a status message region with a role and attributes for announcing updates
 - a known-bad fixture that must fail
 
 ```sh
@@ -71,30 +80,33 @@ python3 browser_structure_check.py
 python3 browser_structure_check.py --self-test
 ```
 
+The first command checks the saved page. The self-test also confirms that the
+fixture with missing elements fails. Neither command opens a browser or clicks
+the form: use a rendered browser test to check actual interaction, layout and
+keyboard access.
+
 ## Choosing A Green Spine
 
-Pick one path that would make the project feel broken if it regressed. Keep the
-command boring, named, and fast enough to run before publishing or handing work
-to a reviewer.
+Choose one path you want to protect. For a form, that might be entering valid
+data, submitting it and seeing confirmation. Name what success looks like,
+then include a bad-input case so you can check that failures are caught too.
 
-Good green spines usually combine a few existing focused checks. They should not
-try to prove everything.
+Combine existing focused checks where you can. Keep the command small enough
+to run before handing over a change, and list what it leaves untested. A pass
+does not give permission to publish or establish that people find the result useful.
 
 ## How These Fit Together
 
-This repo is one piece of a small public toolkit:
+Choose a related tool if you need a different check:
 
 - [Public Repo Safety Kit](https://github.com/TheDarkniteFalls/public-repo-safety-kit)
-  checks a public-candidate repo before publishing.
+  checks a repository you intend to publish.
 - [EvidenceGate](https://github.com/TheDarkniteFalls/evidencegate) records the
   evidence and checks behind an AI-assisted change.
 - [Local Model Reliability Example](https://github.com/TheDarkniteFalls/local-model-reliability-example)
-  validates structured model output and protected-path boundaries before
-  trusting it.
+  validates structured model output and protected-path boundaries.
 - [Context Boundary Examples](https://github.com/TheDarkniteFalls/context-boundary-examples)
   checks whether an answer stays inside supplied evidence.
-- Green-Spine QA Pattern shows how to bundle the important path behind one
-  repeatable command.
 - [Codex Project Instructions Starter](https://github.com/TheDarkniteFalls/codex-project-instructions-starter)
   gives coding agents clear project rules before they work.
 
@@ -105,8 +117,9 @@ connector exports, credentials, or personal data.
 
 ## Scope
 
-This is a pattern, not a framework. Start with one command. Add structure only
-when the command becomes too hard to read or too slow to run.
+Start with one command and adapt the checks to the workflow you chose. Add
+structure only when the command becomes too hard to read or too slow to run.
+The supplied synthetic examples do not establish coverage for your own project.
 
 ## Quality Checks
 
